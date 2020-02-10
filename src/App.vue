@@ -1,13 +1,11 @@
 <template>
   <div id="app">
-    <Products :products="products" />
+    <router-view :products="products"></router-view>
   </div>
 </template>
 
 <script>
-import Products from "./components/Products.vue";
 import axios from "axios";
-
 export default {
   name: "App",
   data() {
@@ -16,10 +14,9 @@ export default {
     };
   },
   components: {
-    Products
   },
   mounted: function() {
-    axios.get("https://hplussport.com/api/products").then(res => {
+    axios.get("https://hplussport.com/api/products/order/price").then(res => {
       this.products = res.data;
     });
   }
@@ -27,4 +24,7 @@ export default {
 </script>
 
 <style>
+body {
+  padding-top: 72px;
+}
 </style>

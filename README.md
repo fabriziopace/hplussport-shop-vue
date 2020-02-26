@@ -5,7 +5,7 @@ All products and people associated with H+ Sport are also fictitious. Any resemb
 
 ## Created with
 1. Vue.JS
-2. Bootstrap
+2. Vuetify
 3. HPlusSport API 
 
 ## Demo

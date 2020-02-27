@@ -1,44 +1,39 @@
 <template>
-  <div class="container">
-    <v-card class="d-inline-block mx-auto" v-for="item in products" :key="item.id">
-      <v-container>
-        <v-row justify="space-between">
-          <v-col cols="auto">
-            <v-img height="200" width="200" :src="item.image" :alt="item.image_title"></v-img>
-          </v-col>
-          <v-col cols="auto" class="text-center pl-0">
-            <v-row class="flex-column ma-0 fill-height" justify="center">
-              <v-col class="px-0">
-                <v-btn icon>
-                  <v-icon>mdi-heart</v-icon>
-                </v-btn>
-              </v-col>
-
-              <v-col class="px-0">
-                <v-btn icon>
-                  <v-icon>mdi-bookmark</v-icon>
-                </v-btn>
-              </v-col>
-
-              <v-col class="px-0">
-                <v-btn icon>
-                  <v-icon>mdi-share-variant</v-icon>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card>
+  <div class="container mx-auto">
+    <v-container fluid>
+      <v-row dense>
+        <v-col v-for="item in products" :key="item.id" cols="12" xs="6" sm="4" md="3">
+          <v-card>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title class="headline">{{item.name}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-img :src="item.image" class="white--text align-end" height="200px"></v-img>
+            <!-- <v-card-text :>{{item.description}}</v-card-text> -->
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn icon>
+                <v-icon>mdi-cart</v-icon>
+              </v-btn>
+              <v-btn icon>
+                <v-icon>mdi-share-variant</v-icon>
+              </v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
 export default {
-    props: ["products"]
-}
+  name: "Products",
+  props: ["products"]
+};
 </script>
 
 <style scoped>
-
 </style>

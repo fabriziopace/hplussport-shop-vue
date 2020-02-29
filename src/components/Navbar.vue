@@ -1,8 +1,17 @@
 <template>
   <v-app-bar app color="red darken-1" dense dark>
-    <v-btn text dark href="/"><v-toolbar-title>H+ Sport Shop</v-toolbar-title></v-btn>
+    <v-btn text dark href="/">
+      <v-toolbar-title>H+ Sport Shop</v-toolbar-title>
+    </v-btn>
     <v-spacer></v-spacer>
-    <v-text-field hide-details prepend-icon="search" placeholder="Search product..." single-line></v-text-field>
+    <v-text-field
+      hide-details
+      prepend-icon="search"
+      placeholder="Search Product..."
+      single-line
+      v-model="searchQuery"
+    ></v-text-field>
+    <v-spacer></v-spacer>
     <v-menu offset-y>
       <template v-slot:activator="{ on: menu }">
         <v-tooltip bottom>
@@ -36,8 +45,14 @@ export default {
         { title: "Item 2" },
         { title: "Item 3" },
         { title: "Item 4" }
-      ]
+      ],
+      searchQuery: ""
     };
+  },
+  watch: {
+    searchQuery: function() {
+      this.$emit("searchProducts", this.searchQuery);
+    }
   }
 };
 </script>

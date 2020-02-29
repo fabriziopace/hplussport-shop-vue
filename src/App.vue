@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <Navbar />
+    <Navbar @searchProducts="searchProducts" />
     <v-content>
-      <router-view :products="products"></router-view>
+      <router-view :products="filteredProducts"></router-view>
     </v-content>
   </v-app>
 </template>
@@ -16,21 +16,26 @@ export default {
   data: () => {
     return {
       products: null,
-      items: [
-        { title: "Item 1" },
-        { title: "Item 2" },
-        { title: "Item 3" },
-        { title: "Item 4" }
-      ]
+      searchQuery: ""
     };
   },
   components: {
     Navbar
   },
+  computed: {
+    filteredProducts: function() {      
+      return this.products ? this.products.filter(p => p.name.toLowerCase().match(this.searchQuery.toLowerCase())) : this.products;
+    }
+  },
   mounted: function() {
     axios.get("https://hplussport.com/api/products/order/price").then(res => {
       this.products = res.data;
     });
+  },
+  methods: {    
+    searchProducts: function(query) {
+      this.searchQuery = query;
+    }
   }
 };
 </script>

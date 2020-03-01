@@ -13,10 +13,11 @@
             <!-- <v-card-text>{{item.description}}</v-card-text> -->
             <v-card-actions>
               <v-chip class="mr-2" color="red lighten-1" dark>
-                <v-icon left small>euro_symbol</v-icon>{{parseInt(item.price).toFixed(2)}}
+                <v-icon left small>euro_symbol</v-icon>
+                {{parseInt(item.price).toFixed(2)}}
               </v-chip>
               <v-spacer></v-spacer>
-              <v-btn icon>
+              <v-btn icon v-on:click="cart.push(item)">
                 <v-icon>add_shopping_cart</v-icon>
               </v-btn>
               <v-btn icon>
@@ -33,7 +34,17 @@
 <script>
 export default {
   name: "Products",
-  props: ["products"]
+  props: ["products"],
+  data: () => {
+    return {
+      cart: []
+    };
+  },
+  watch: {
+    cart: function() {
+      this.$emit("addCart", this.cart);
+    }
+  }
 };
 </script>
 

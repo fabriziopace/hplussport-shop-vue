@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <Navbar @searchProducts="searchProducts" />
+    <Navbar @searchProducts="searchProducts" :cart="cart" />
     <v-content>
-      <router-view :products="filteredProducts"></router-view>
+      <router-view :products="filteredProducts" @addCart="addCart"></router-view>
     </v-content>
   </v-app>
 </template>
@@ -16,15 +16,20 @@ export default {
   data: () => {
     return {
       products: null,
-      searchQuery: ""
+      searchQuery: "",
+      cart: []
     };
   },
   components: {
     Navbar
   },
   computed: {
-    filteredProducts: function() {      
-      return this.products ? this.products.filter(p => p.name.toLowerCase().match(this.searchQuery.toLowerCase())) : this.products;
+    filteredProducts: function() {
+      return this.products
+        ? this.products.filter(p =>
+            p.name.toLowerCase().match(this.searchQuery.toLowerCase())
+          )
+        : this.products;
     }
   },
   mounted: function() {
@@ -32,9 +37,12 @@ export default {
       this.products = res.data;
     });
   },
-  methods: {    
+  methods: {
     searchProducts: function(query) {
       this.searchQuery = query;
+    },
+    addCart: function(products) {
+      this.cart = products;
     }
   }
 };

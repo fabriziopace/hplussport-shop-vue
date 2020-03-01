@@ -18,15 +18,15 @@
           <template v-slot:activator="{ on: tooltip }">
             <v-btn text dark v-on="{ ...tooltip, ...menu }">
               <v-icon>mdi-cart</v-icon>
-              <v-badge content="0" color="red darken-4" inline></v-badge>
+              <v-badge :content="cart.length.toString()" color="red darken-4" inline></v-badge>
             </v-btn>
           </template>
           <span>Cart</span>
         </v-tooltip>
       </template>
       <v-list>
-        <v-list-item v-for="(item, index) in items" :key="index">
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        <v-list-item v-for="(product, index) in cart" :key="index">
+          <v-list-item-title>{{ cart[index].name }} <strong>€ {{parseInt(cart[index].price).toFixed(2)}}</strong></v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -38,14 +38,9 @@
 <script>
 export default {
   name: "Navbar",
+  props: ["cart"],
   data: () => {
     return {
-      items: [
-        { title: "Item 1" },
-        { title: "Item 2" },
-        { title: "Item 3" },
-        { title: "Item 4" }
-      ],
       searchQuery: ""
     };
   },

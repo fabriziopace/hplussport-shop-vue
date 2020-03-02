@@ -27,6 +27,21 @@
           </v-card>
         </v-col>
       </v-row>
+      <v-fab-transition>
+        <v-btn
+          fab
+          color="red darken-1"
+          v-scroll="onScrollBtn"
+          v-show="showBtnScrollUp"
+          @click="goToTop"
+          dark
+          fixed
+          right
+          bottom
+        >
+          <v-icon>keyboard_arrow_up</v-icon>
+        </v-btn>
+      </v-fab-transition>
     </v-container>
   </div>
 </template>
@@ -37,12 +52,21 @@ export default {
   props: ["products"],
   data: () => {
     return {
-      cart: []
+      cart: [],
+      showBtnScrollUp: false
     };
   },
   watch: {
     cart: function() {
       this.$emit("addCart", this.cart);
+    }
+  },
+  methods: {
+    goToTop: function() {
+      this.$vuetify.goTo(0);
+    },
+    onScrollBtn: function(event) {
+      this.showBtnScrollUp = (window.pageYOffset || event.target.scrollTop || 0) > 40;
     }
   }
 };

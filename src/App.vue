@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Navbar @searchProducts="searchProducts" :cart="cart" />
+    <Navbar @searchProducts="searchProducts" :cart="cart" :subtotalCart="subtotalCart" />
     <v-content>
       <router-view :products="filteredProducts" @addCart="addCart"></router-view>
     </v-content>
@@ -24,6 +24,14 @@ export default {
     Navbar
   },
   computed: {
+    subtotalCart: function() {
+      let sum = 0;
+      this.cart.map(p => {
+        sum += parseInt(p.price);
+      });
+
+      return sum;
+    },
     filteredProducts: function() {
       return this.products
         ? this.products.filter(p =>

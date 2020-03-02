@@ -42,6 +42,10 @@
           <v-icon>keyboard_arrow_up</v-icon>
         </v-btn>
       </v-fab-transition>
+      <v-snackbar v-model="snackbar.visible" bottom :timeout="snackbar.timeout">
+        {{ snackbar.text }}
+        <v-btn dark text @click="snackbar.visible = false">Close</v-btn>
+      </v-snackbar>
     </v-container>
   </div>
 </template>
@@ -53,11 +57,17 @@ export default {
   data: () => {
     return {
       cart: [],
-      showBtnScrollUp: false
+      showBtnScrollUp: false,
+      snackbar: {
+        visible: false,
+        timeout: 1500,
+        text: ""
+      }
     };
   },
   watch: {
     cart: function() {
+      this.productAddedMessage();
       this.$emit("addCart", this.cart);
     }
   },
@@ -66,7 +76,12 @@ export default {
       this.$vuetify.goTo(0);
     },
     onScrollBtn: function(event) {
-      this.showBtnScrollUp = (window.pageYOffset || event.target.scrollTop || 0) > 40;
+      this.showBtnScrollUp =
+        (window.pageYOffset || event.target.scrollTop || 0) > 40;
+    },
+    productAddedMessage: function() {
+      this.snackbar.visible = true;
+      this.snackbar.text = "Product added to the cart.";
     }
   }
 };

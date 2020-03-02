@@ -12,7 +12,7 @@
       v-model="searchQuery"
     ></v-text-field>
     <v-spacer></v-spacer>
-    <v-menu offset-y>
+    <v-menu offset-y :close-on-content-click="false" max-height="500px" min-width="400px">
       <template v-slot:activator="{ on: menu }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on: tooltip }">
@@ -24,11 +24,53 @@
           <span>Cart</span>
         </v-tooltip>
       </template>
-      <v-list>
-        <v-list-item v-for="(product, index) in cart" :key="index">
-          <v-list-item-title>{{ cart[index].name }} <strong>€ {{parseInt(cart[index].price).toFixed(2)}}</strong></v-list-item-title>
-        </v-list-item>
-      </v-list>
+      <v-card>
+        <v-list v-if="cart.length>0">
+          <v-list-item v-for="(product, index) in cart" :key="index">
+            <v-list-item-avatar>
+              <img :src="product.image" :alt="product.image_title" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{ product.name }}</v-list-item-title>
+              <v-list-item-subtitle>€ {{parseInt(product.price).toFixed(2)}}</v-list-item-subtitle>
+            </v-list-item-content>
+            <v-list-item-action>
+              <v-btn
+                elevation="0"
+                color="red light-4"
+                dark
+                fab
+                width="15px"
+                height="15px"
+                @click="removeFromCart(index)"
+              >
+                <v-icon size="10" style="margin-top: -4px;">close</v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
+          <v-divider inset="inset"></v-divider>
+          <v-container style="padding-bottom:0px;">
+            <v-row>
+              <v-col cols="9" class="text-right">Subtotal:</v-col>
+              <v-col cols="3" class="text-right">
+                <strong style="color:#388E3C;">€ {{parseInt(subtotalCart).toFixed(2)}}</strong>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <v-btn block color="red darken-1" elevation="0" rounded dark>CHECKOUT</v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-list>
+        <v-list v-if="cart.length<1">
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>No Products</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-card>
     </v-menu>
     <v-btn text dark href="/#/signin">Sign In</v-btn>
     <v-btn text dark href="/#/join">Join</v-btn>
@@ -38,7 +80,7 @@
 <script>
 export default {
   name: "Navbar",
-  props: ["cart"],
+  props: ["cart", "subtotalCart"],
   data: () => {
     return {
       searchQuery: ""
@@ -47,6 +89,11 @@ export default {
   watch: {
     searchQuery: function() {
       this.$emit("searchProducts", this.searchQuery);
+    }
+  },
+  methods: {
+    removeFromCart: function(index) {
+      this.cart.splice(index, 1);
     }
   }
 };

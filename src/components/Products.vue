@@ -10,14 +10,13 @@
               </v-list-item-content>
             </v-list-item>
             <v-img :src="item.image" class="white--text align-end" height="200px"></v-img>
-            <!-- <v-card-text>{{item.description}}</v-card-text> -->
             <v-card-actions>
               <v-chip class="mr-2" color="red lighten-1" dark>
                 <v-icon left small>euro_symbol</v-icon>
                 {{parseInt(item.price).toFixed(2)}}
               </v-chip>
               <v-spacer></v-spacer>
-              <v-btn icon v-on:click="cart.push(item)">
+              <v-btn icon v-on:click="addToCart(item)">
                 <v-icon>add_shopping_cart</v-icon>
               </v-btn>
               <v-btn icon>
@@ -71,6 +70,11 @@ export default {
       this.$emit("addCart", this.cart);
     }
   },
+  mounted: function() {
+    this.cart = localStorage.getItem("cart")
+      ? JSON.parse(localStorage.getItem("cart"))
+      : [];
+  },
   methods: {
     goToTop: function() {
       this.$vuetify.goTo(0);
@@ -82,6 +86,15 @@ export default {
     productAddedMessage: function() {
       this.snackbar.visible = true;
       this.snackbar.text = "Product added to the cart.";
+    },
+    addToCart: function(item) {
+      let indexProduct = this.cart.findIndex(p => p.name === item.name);
+      if (indexProduct > -1) {
+        this.cart[indexProduct].quantity += 1;
+      } else {
+        item.quantity = 1;
+        this.cart.push(item);
+      }
     }
   }
 };

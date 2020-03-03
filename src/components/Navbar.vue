@@ -31,8 +31,13 @@
               <img :src="product.image" :alt="product.image_title" />
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ product.name }}</v-list-item-title>
-              <v-list-item-subtitle>€ {{parseInt(product.price).toFixed(2)}}</v-list-item-subtitle>
+              <v-col cols="9">
+                <v-list-item-title>{{ product.name }}</v-list-item-title>
+                <v-list-item-subtitle>€ {{parseInt(product.price).toFixed(2)}}</v-list-item-subtitle>
+              </v-col>
+              <v-col cols="3">
+                <v-text-field type="Number" solo dense flat outlined hide-details :value="product.quantity"></v-text-field>
+              </v-col>
             </v-list-item-content>
             <v-list-item-action>
               <v-btn
@@ -42,7 +47,7 @@
                 fab
                 width="15px"
                 height="15px"
-                @click="removeFromCart(index)"
+                @click="removeCart(index)"
               >
                 <v-icon size="10" style="margin-top: -4px;">close</v-icon>
               </v-btn>
@@ -92,8 +97,9 @@ export default {
     }
   },
   methods: {
-    removeFromCart: function(index) {
+    removeCart: function(index) {
       this.cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(this.cart));
     }
   }
 };

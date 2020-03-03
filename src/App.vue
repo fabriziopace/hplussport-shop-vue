@@ -41,6 +41,10 @@ export default {
     }
   },
   mounted: function() {
+    this.cart = localStorage.getItem("cart")
+      ? JSON.parse(localStorage.getItem("cart"))
+      : [];
+
     axios.get("https://hplussport.com/api/products/order/price").then(res => {
       this.products = res.data;
     });
@@ -51,6 +55,7 @@ export default {
     },
     addCart: function(products) {
       this.cart = products;
+      localStorage.setItem("cart", JSON.stringify(products));
     }
   }
 };

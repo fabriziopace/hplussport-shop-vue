@@ -6,7 +6,9 @@
           <v-card>
             <v-list-item>
               <v-list-item-content>
-                <v-list-item-title class="headline">{{item.name}}</v-list-item-title>
+                <v-list-item-title class="headline">
+                  <h6>{{item.name}}</h6>
+                </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
             <v-img :src="item.image" class="white--text align-end" height="200px"></v-img>
@@ -19,7 +21,7 @@
               <v-btn icon v-on:click="addToCart(item)">
                 <v-icon>add_shopping_cart</v-icon>
               </v-btn>
-              <v-btn icon>
+              <v-btn icon v-on:click="sharewithsheet.visible = true">
                 <v-icon>mdi-share-variant</v-icon>
               </v-btn>
             </v-card-actions>
@@ -45,6 +47,23 @@
         {{ snackbar.text }}
         <v-btn dark text @click="snackbar.visible = false">Close</v-btn>
       </v-snackbar>
+      <v-bottom-sheet v-model="sharewithsheet.visible">
+        <v-list>
+          <v-subheader>Share with</v-subheader>
+          <v-list-item
+            @click="sharewithsheet.visible = false"
+            v-for="tile in sharewithRows"
+            :key="tile.title"
+          >
+            <v-list-item-avatar>
+              <v-avatar size="32px" tile>
+                <img :src="tile.img" :alt="tile.title" />
+              </v-avatar>
+            </v-list-item-avatar>
+            <v-list-item-title>{{tile.title}}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-bottom-sheet>
     </v-container>
   </div>
 </template>
@@ -59,14 +78,38 @@ export default {
       showBtnScrollUp: false,
       snackbar: {
         visible: false,
-        timeout: 1500,
+        timeout: 700,
         text: ""
-      }
+      },
+      sharewithsheet: {
+        visible: false
+      },
+      sharewithRows: [
+        {
+          img: "https://cdn.vuetifyjs.com/images/bottom-sheets/keep.png",
+          title: "Keep"
+        },
+        {
+          img: "https://cdn.vuetifyjs.com/images/bottom-sheets/inbox.png",
+          title: "Inbox"
+        },
+        {
+          img: "https://cdn.vuetifyjs.com/images/bottom-sheets/hangouts.png",
+          title: "Hangouts"
+        },
+        {
+          img: "https://cdn.vuetifyjs.com/images/bottom-sheets/messenger.png",
+          title: "Messenger"
+        },
+        {
+          img: "https://cdn.vuetifyjs.com/images/bottom-sheets/google.png",
+          title: "Google+"
+        }
+      ]
     };
   },
   watch: {
     cart: function() {
-      this.productAddedMessage();
       this.$emit("addCart", this.cart);
     }
   },
@@ -95,6 +138,7 @@ export default {
         item.quantity = 1;
         this.cart.push(item);
       }
+      this.productAddedMessage();
     }
   }
 };

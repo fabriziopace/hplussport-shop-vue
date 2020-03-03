@@ -12,7 +12,7 @@
       v-model="searchQuery"
     ></v-text-field>
     <v-spacer></v-spacer>
-    <v-menu offset-y :close-on-content-click="false" max-height="500px" min-width="400px">
+    <v-menu offset-y :close-on-content-click="false" max-height="500px" min-width="500px" max-width="500px">
       <template v-slot:activator="{ on: menu }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on: tooltip }">
@@ -36,7 +36,7 @@
                 <v-list-item-subtitle>€ {{parseInt(product.price).toFixed(2)}}</v-list-item-subtitle>
               </v-col>
               <v-col cols="3">
-                <v-text-field type="Number" solo dense flat outlined hide-details :value="product.quantity"></v-text-field>
+                <v-text-field type="Number" filled outlined solo dense flat hide-details :value="product.quantity"></v-text-field>
               </v-col>
             </v-list-item-content>
             <v-list-item-action>

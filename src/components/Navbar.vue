@@ -10,11 +10,12 @@
       placeholder="Search Product..."
       single-line
       v-model="searchQuery"
+      class="d-none d-sm-flex"
     ></v-text-field>
     <v-spacer></v-spacer>
-    <v-menu offset-y :close-on-content-click="false" max-height="500px" min-width="500px" max-width="500px">
+    <v-menu offset-y :close-on-content-click="false" min-width="370px" max-height="500px">
       <template v-slot:activator="{ on: menu }">
-        <v-tooltip bottom>
+        <v-tooltip disabled>
           <template v-slot:activator="{ on: tooltip }">
             <v-btn text dark v-on="{ ...tooltip, ...menu }">
               <v-icon>mdi-cart</v-icon>
@@ -31,12 +32,25 @@
               <img :src="product.image" :alt="product.image_title" />
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-col cols="9">
+              <v-col cols="8">
                 <v-list-item-title>{{ product.name }}</v-list-item-title>
                 <v-list-item-subtitle>€ {{parseInt(product.price).toFixed(2)}}</v-list-item-subtitle>
               </v-col>
-              <v-col cols="3">
-                <v-text-field type="Number" filled outlined solo dense flat hide-details :value="product.quantity"></v-text-field>
+              <v-col cols="4">
+                <v-text-field
+                  type="Number"
+                  filled
+                  solo
+                  dense
+                  flat
+                  hide-details
+                  v-model="product.quantity"
+                  min="1"
+                  max="100"
+                  background-color="blue-grey lighten-5"
+                  @click="changeCartQuantity(index)"
+                  @change="changeCartQuantity(index)"
+                ></v-text-field>
               </v-col>
             </v-list-item-content>
             <v-list-item-action>
@@ -53,7 +67,7 @@
               </v-btn>
             </v-list-item-action>
           </v-list-item>
-          <v-divider inset="inset"></v-divider>
+          <v-divider></v-divider>
           <v-container style="padding-bottom:0px;">
             <v-row>
               <v-col cols="9" class="text-right">Subtotal:</v-col>
@@ -63,7 +77,14 @@
             </v-row>
             <v-row>
               <v-col cols="12">
-                <v-btn block color="red darken-1" elevation="0" rounded dark>CHECKOUT</v-btn>
+                <v-btn
+                  block
+                  color="red darken-1"
+                  elevation="0"
+                  dark
+                  :loading="loadingCheckoutBtn"
+                  @click="loadingCheckoutBtn = true"
+                >CHECKOUT</v-btn>
               </v-col>
             </v-row>
           </v-container>
@@ -77,8 +98,10 @@
         </v-list>
       </v-card>
     </v-menu>
-    <v-btn text dark href="/#/signin">Sign In</v-btn>
-    <v-btn text dark href="/#/join">Join</v-btn>
+    <v-snackbar v-model="snackbar.visible" bottom :timeout="snackbar.timeout">
+      {{ snackbar.text }}
+      <v-btn dark text @click="snackbar.visible = false">Close</v-btn>
+    </v-snackbar>
   </v-app-bar>
 </template>
 
@@ -88,17 +111,39 @@ export default {
   props: ["cart", "subtotalCart"],
   data: () => {
     return {
-      searchQuery: ""
+      searchQuery: "",
+      loadingCheckoutBtn: false,
+      snackbar: {
+        visible: false,
+        timeout: 700,
+        text: ""
+      }
     };
   },
   watch: {
     searchQuery: function() {
       this.$emit("searchProducts", this.searchQuery);
+    },
+    loadingCheckoutBtn: function() {
+      setTimeout(() => {
+        this.loadingCheckoutBtn = false;
+        this.cart = [];
+        localStorage.setItem("cart", JSON.stringify(this.cart));
+      }, 3000);
     }
   },
   methods: {
     removeCart: function(index) {
       this.cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(this.cart));
+    },
+    changeCartQuantity: function(index) {
+      let prodQuantity = parseInt(this.cart[index].quantity);
+      if (prodQuantity < 1) {
+        this.cart.splice(index, 1);
+      } else if (prodQuantity > 100) {
+        this.cart[index].quantity = 100;
+      }
       localStorage.setItem("cart", JSON.stringify(this.cart));
     }
   }

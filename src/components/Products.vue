@@ -3,7 +3,8 @@
     <v-container fluid>
       <v-row dense>
         <v-col v-for="item in products" :key="item.id" cols="12" xs="6" sm="4" md="3" lg="2">
-          <v-card>
+          <v-skeleton-loader v-if="loadingProducts" type="image"></v-skeleton-loader>
+          <v-card v-else>
             <v-list-item>
               <v-list-item-content>
                 <v-list-item-title class="headline">
@@ -45,7 +46,6 @@
       </v-fab-transition>
       <v-snackbar v-model="snackbar.visible" bottom :timeout="snackbar.timeout">
         {{ snackbar.text }}
-        <v-btn dark text @click="snackbar.visible = false">Close</v-btn>
       </v-snackbar>
       <v-bottom-sheet v-model="sharewithsheet.visible">
         <v-list>
@@ -74,6 +74,7 @@ export default {
   props: ["products"],
   data: () => {
     return {
+      loadingProducts: true,
       cart: [],
       showBtnScrollUp: false,
       snackbar: {
@@ -117,6 +118,8 @@ export default {
     this.cart = localStorage.getItem("cart")
       ? JSON.parse(localStorage.getItem("cart"))
       : [];
+
+      setTimeout(() => (this.loadingProducts = false), 2000);
   },
   methods: {
     goToTop: function() {
@@ -128,12 +131,15 @@ export default {
     },
     productAddedMessage: function() {
       this.snackbar.visible = true;
-      this.snackbar.text = "Product added to the cart.";
+      this.snackbar.text = "Product added to your cart";
     },
     addToCart: function(item) {
-      let indexProduct = this.cart.findIndex(p => p.name === item.name);
+      let indexProduct = this.cart.findIndex(p => p.id === item.id);
       if (indexProduct > -1) {
-        this.cart[indexProduct].quantity += 1;
+        let tempProduct = this.cart[indexProduct];
+        this.cart.splice(indexProduct, 1);
+        tempProduct.quantity++;
+        this.cart.push(tempProduct);
       } else {
         item.quantity = 1;
         this.cart.push(item);
@@ -144,5 +150,8 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+.v-skeleton-loader__image {
+  height: 308px;
+}
 </style>

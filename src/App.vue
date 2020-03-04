@@ -27,7 +27,7 @@ export default {
     subtotalCart: function() {
       let sum = 0;
       this.cart.map(p => {
-        sum += parseInt(p.price);
+        sum += parseInt(p.price) * p.quantity;
       });
 
       return sum;

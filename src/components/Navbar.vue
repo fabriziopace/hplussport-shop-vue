@@ -98,10 +98,6 @@
         </v-list>
       </v-card>
     </v-menu>
-    <v-snackbar v-model="snackbar.visible" bottom :timeout="snackbar.timeout">
-      {{ snackbar.text }}
-      <v-btn dark text @click="snackbar.visible = false">Close</v-btn>
-    </v-snackbar>
   </v-app-bar>
 </template>
 
@@ -112,12 +108,7 @@ export default {
   data: () => {
     return {
       searchQuery: "",
-      loadingCheckoutBtn: false,
-      snackbar: {
-        visible: false,
-        timeout: 700,
-        text: ""
-      }
+      loadingCheckoutBtn: false
     };
   },
   watch: {

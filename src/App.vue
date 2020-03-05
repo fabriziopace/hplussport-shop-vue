@@ -4,24 +4,28 @@
     <v-content>
       <router-view :products="filteredProducts" @addCart="addCart"></router-view>
     </v-content>
+    <Footer v-if="pageLoaded" />
   </v-app>
 </template>
 
 <script>
 import axios from "axios";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 export default {
   name: "App",
   data: () => {
     return {
+      pageLoaded: false,
       products: null,
       searchQuery: "",
       cart: []
     };
   },
   components: {
-    Navbar
+    Navbar,
+    Footer
   },
   computed: {
     subtotalCart: function() {
@@ -48,6 +52,8 @@ export default {
     axios.get("https://hplussport.com/api/products/order/price").then(res => {
       this.products = res.data;
     });
+
+    setTimeout(() => (this.pageLoaded = true), 2000);
   },
   methods: {
     searchProducts: function(query) {

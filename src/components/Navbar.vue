@@ -134,6 +134,8 @@ export default {
         this.cart.splice(index, 1);
       } else if (prodQuantity > 100) {
         this.cart[index].quantity = 100;
+      } else {
+        this.$set(this.cart, index, this.cart[index]);
       }
       localStorage.setItem("cart", JSON.stringify(this.cart));
     }

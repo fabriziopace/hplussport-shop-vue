@@ -11,7 +11,7 @@ All products and people associated with H+ Sport are also fictitious. Any resemb
 3. HPlusSport API 
 
 ## Demo
-https://hplussport-shop-vue.herokuapp.com/
+-
 
 ## Installation
 1. `git clone https://github.com/fabriziopace/hplussport-shop-vue.git`

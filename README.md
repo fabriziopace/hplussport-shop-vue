@@ -10,9 +10,6 @@ All products and people associated with H+ Sport are also fictitious. Any resemb
 2. Vuetify
 3. HPlusSport API 
 
-## Demo
--
-
 ## Installation
 1. `git clone https://github.com/fabriziopace/hplussport-shop-vue.git`
 2. `cd hplussport-shop-vue`
